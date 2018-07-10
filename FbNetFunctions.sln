@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{D6F99B79-212
 		sql\script.sql = sql\script.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FbNetFunctions.Tests", "FbNetFunctions.Tests\FbNetFunctions.Tests.csproj", "{345B444E-7CB3-450D-9A51-9644354F1D31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{1A8198D3-3038-4347-96F1-162A843E1809}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A8198D3-3038-4347-96F1-162A843E1809}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A8198D3-3038-4347-96F1-162A843E1809}.Release|Any CPU.Build.0 = Release|Any CPU
+		{345B444E-7CB3-450D-9A51-9644354F1D31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{345B444E-7CB3-450D-9A51-9644354F1D31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{345B444E-7CB3-450D-9A51-9644354F1D31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{345B444E-7CB3-450D-9A51-9644354F1D31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
