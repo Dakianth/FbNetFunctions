@@ -3,71 +3,61 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Net;
 using System.Text;
 
 namespace FbNetFunctions
 {
     public static class Procedures
     {
-        public static IEnumerator<(string, string, string)> DownloadFile(string s, string n)
+        public static IEnumerator<(int?, string)> DownloadImage(string s, int? w, int? h, int? t)
         {
-            var root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Automatiza", "QrCodes");
-            Directory.CreateDirectory(root);
-
-            var d = Path.Combine(root, n);
-            var client = new WebClient();
-            client.DownloadFile(s, d);
-
-            yield return (s, n, d);
-        }
-
-        public static IEnumerator<(string, string)> DownloadData(string s)
-        {
-            var client = new WebClient();
-            var data = client.DownloadData(s);
-
             byte[] output = null;
-            using (var ms_input = new MemoryStream(data))
+            Bitmap image = GerarQRCode(w ?? 150, h ?? 150, s);
+            using (MemoryStream ms_output = new MemoryStream())
             {
-                var i = new Bitmap(ms_input);
-                using (var ms_output = new MemoryStream())
-                {
-                    ImageCodecInfo jpegEncoder = GetEncoder(ImageFormat.Jpeg);
-                    var encoderParameters = new EncoderParameters(1);
-                    encoderParameters.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 30L);
-                    i.Save(ms_output, jpegEncoder, encoderParameters);
-                    output = ms_output.ToArray();
-                }
+                image.Save(ms_output, ImageFormat.Jpeg);
+                output = ms_output.ToArray();
             }
-            string sdata = output.ByteArrayToString1();
-            yield return (s, sdata);
+
+            string sdata = output.ByteArrayToString();
+            foreach ((int i, string d) in ChunksUpto(sdata, t ?? 500))
+                yield return (i, d);
         }
-        private static ImageCodecInfo GetEncoder(ImageFormat format)
+
+        public static Bitmap GerarQRCode(int width, int height, string text)
         {
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
-            foreach (ImageCodecInfo codec in codecs)
+            try
             {
-                if (codec.FormatID == format.Guid)
-                    return codec;
+                ZXing.BarcodeWriter bw = new ZXing.BarcodeWriter();
+                ZXing.Common.EncodingOptions encOptions = new ZXing.Common.EncodingOptions() { Width = width, Height = height, Margin = 0 };
+                bw.Options = encOptions;
+                bw.Format = ZXing.BarcodeFormat.QR_CODE;
+                Bitmap resultado = new Bitmap(bw.Write(text));
+                return resultado;
             }
-            return null;
+            catch
+            {
+                throw;
+            }
+        }
+
+        private static IEnumerable<(int, string)> ChunksUpto(string str, int maxChunkSize)
+        {
+            int j = 0;
+            for (int i = 0; i < str.Length; i += maxChunkSize)
+                yield return (j++, str.Substring(i, Math.Min(maxChunkSize, str.Length - i)));
         }
     }
+
     public static class ProceduresExt
     {
-        public static string ByteArrayToString1(this byte[] ba)
+        public static string ByteArrayToString(this byte[] ba)
         {
             StringBuilder hex = new StringBuilder(ba.Length * 2);
             foreach (byte b in ba)
                 hex.AppendFormat("{0:x2}", b);
-            return hex.ToString();
-        }
 
-        public static string ByteArrayToString2(this byte[] ba)
-        {
-            string hex = BitConverter.ToString(ba);
-            return hex.Replace("-", "");
+            return hex.ToString();
         }
     }
 }

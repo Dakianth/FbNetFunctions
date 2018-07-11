@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FbNetFunctions.Tests
 {
@@ -8,15 +6,10 @@ namespace FbNetFunctions.Tests
     public class ProceduresTest
     {
         [TestMethod]
-        public void DownloadFileTest()
+        public void DownloadImageTest()
         {
-        }
-
-        [TestMethod]
-        public void DownloadDataTest()
-        {
-            var result = Procedures.DownloadData("https://chart.googleapis.com/chart?chs=100x100&cht=qr&chl=https://selos.tjmg.jus.br/sisnor/eselo/consultaSeloseAtos.jsf?selo=ABC12345%26codigo=1234567812345678");
-            var l = result.MoveNext();
+            var result = Procedures.DownloadImage("https://selos.tjmg.jus.br/sisnor/eselo/consultaSeloseAtos.jsf?selo=ABC12345&codigo=1234567812345678", 150, 150, 500);
+            bool l = result.MoveNext();
         }
     }
 }
