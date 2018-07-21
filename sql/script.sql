@@ -1,3 +1,13 @@
+recreate procedure delete_file(f varchar(4000))
+returns (original_f varchar(4000), b boolean)
+external name 'FbNetFunctions!FbNetFunctions.Procedures.FileAppendLine'
+engine FbNetExternalEngine;
+
+recreate procedure file_append_line(f varchar(4000), l varchar(4000))
+returns (original_f varchar(4000), original_l varchar(4000))
+external name 'FbNetFunctions!FbNetFunctions.Procedures.FileAppendLine'
+engine FbNetExternalEngine;
+
 recreate procedure download_image(s varchar(4000), w int, h int, t int)
 returns (i int, d varchar(4000))
 external name 'FbNetFunctions!FbNetFunctions.Procedures.DownloadImage'

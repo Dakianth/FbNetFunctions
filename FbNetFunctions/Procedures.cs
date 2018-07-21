@@ -9,6 +9,24 @@ namespace FbNetFunctions
 {
     public static class Procedures
     {
+        public static IEnumerator<(string, bool?)> DeleteFile(string f)
+        {
+            var b = File.Exists(f);
+            if (b)
+                File.Delete(f);
+
+            yield return (f, b);
+        }
+
+        public static IEnumerator<(string, string)> FileAppendLine(string f, string l)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(f));
+            using (var s = File.AppendText(f))
+                s.WriteLine(l);
+
+            yield return (f, l);
+        }
+
         public static IEnumerator<(int?, string)> DownloadImage(string s, int? w, int? h, int? t)
         {
             byte[] output = null;
